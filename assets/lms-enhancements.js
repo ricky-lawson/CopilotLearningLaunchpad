@@ -1,5 +1,6 @@
 (() => {
   const ACCOUNT_KEY = "copilotLaunchpadLmsAccount";
+  const SIGNED_OUT_KEY = "copilotLaunchpadLmsSignedOut";
   const PROGRESS_KEY = "copilotLaunchpadLmsProgress";
   const GOAL_KEY = "copilotLaunchpadLmsGoal";
   const BOOKMARK_KEY = "copilotLaunchpadLmsBookmark";
@@ -29,7 +30,9 @@
 
   const setJson = (key, value) => localStorage.setItem(key, JSON.stringify(value));
 
-  const account = () => getJson(ACCOUNT_KEY, null);
+  const rawAccount = () => getJson(ACCOUNT_KEY, null);
+  const isSignedOut = () => localStorage.getItem(SIGNED_OUT_KEY) === "true";
+  const account = () => (isSignedOut() ? null : rawAccount());
   const progress = () => getJson(PROGRESS_KEY, { completed: [], minutes: 0 });
   const goal = () => Number(localStorage.getItem(GOAL_KEY) || "60");
   const bookmark = () => getJson(BOOKMARK_KEY, null);
@@ -315,17 +318,35 @@
     if (!force && panel.contains(document.activeElement)) return;
 
     const profile = account();
+    const savedProfile = rawAccount();
     const state = progress();
     const complete = state.completed.length;
     const percent = pct();
     const savedBookmark = bookmark();
+
+    if (!profile && savedProfile) {
+      panel.innerHTML = `
+        <div class="lms-account-header">
+          <div>
+            <p class="lms-account-title">Signed out</p>
+            <p class="lms-account-subtitle">Your local Copilot learning profile for ${escapeHtml(savedProfile.name)} is saved on this device.</p>
+          </div>
+          <span class="lms-pill">Signed out</span>
+        </div>
+        <div class="lms-account-actions">
+          <button class="lms-button" data-lms-signin>Sign back in</button>
+          <button class="lms-button secondary" data-lms-new-account>Create a different account</button>
+        </div>
+      `;
+      return;
+    }
 
     if (!profile) {
       panel.innerHTML = `
         <div class="lms-account-header">
           <div>
             <p class="lms-account-title">Create your learner account</p>
-            <p class="lms-account-subtitle">Track your Copilot learning locally in this browser. No default learner, company profile, persona, or synthetic progress is used.</p>
+            <p class="lms-account-subtitle">Answer a few setup questions to personalize the LMS. Your account and progress stay local to this browser.</p>
           </div>
           <span class="lms-pill">Clean slate</span>
         </div>
@@ -341,6 +362,38 @@
               <option>Lead a Copilot learning cohort</option>
             </select>
           </label>
+          <label>Current Copilot experience
+            <select name="experience">
+              <option>I'm brand new</option>
+              <option>I've tried Copilot a few times</option>
+              <option>I use Copilot weekly</option>
+              <option>I help others learn Copilot</option>
+            </select>
+          </label>
+          <label>Copilot access
+            <select name="access">
+              <option>Copilot Chat</option>
+              <option>Microsoft 365 Copilot</option>
+              <option>Copilot Chat and Microsoft 365 Copilot</option>
+              <option>I'm not sure yet</option>
+            </select>
+          </label>
+          <label>Preferred practice style
+            <select name="style">
+              <option>Short hands-on labs</option>
+              <option>Guided walkthroughs</option>
+              <option>Quizzes and checks</option>
+              <option>Open-ended challenges</option>
+            </select>
+          </label>
+          <label>Weekly learning goal
+            <select name="weeklyGoal">
+              <option value="30">30 minutes</option>
+              <option value="60" selected>60 minutes</option>
+              <option value="90">90 minutes</option>
+              <option value="120">120 minutes</option>
+            </select>
+          </label>
           <button class="lms-button" type="submit">Create account</button>
         </form>
       `;
@@ -351,7 +404,7 @@
       <div class="lms-account-header">
         <div>
           <p class="lms-account-title">Welcome, ${escapeHtml(profile.name)}</p>
-          <p class="lms-account-subtitle">${escapeHtml(profile.goal)} · ${level()} · browser-local account</p>
+          <p class="lms-account-subtitle">${escapeHtml(profile.goal)} · ${escapeHtml(profile.experience || "New learner")} · ${level()} · browser-local account</p>
         </div>
         <span class="lms-pill">${complete}/${TOTAL_MODULES} modules</span>
       </div>
@@ -363,9 +416,10 @@
         <button class="lms-button" data-lms-complete-current>Mark current lesson complete</button>
         <button class="lms-button secondary" data-lms-bookmark>Bookmark this page</button>
         <button class="lms-button secondary" data-lms-resume>${savedBookmark ? "Resume bookmarked lesson" : "Start next module"}</button>
+        <button class="lms-button secondary" data-lms-signout>Sign out</button>
         <button class="lms-button secondary" data-lms-reset>Reset progress</button>
       </div>
-      <p class="lms-small">Suggested path: ${COURSE_LABELS[Math.min(complete, COURSE_LABELS.length - 1)]}. Progress stays on this device unless you clear browser storage.</p>
+      <p class="lms-small">Suggested path: ${COURSE_LABELS[Math.min(complete, COURSE_LABELS.length - 1)]}. Practice style: ${escapeHtml(profile.style || "Short hands-on labs")}. Access: ${escapeHtml(profile.access || "Not specified")}. Progress stays on this device unless you clear browser storage.</p>
     `;
   };
 
@@ -382,8 +436,14 @@
         name: String(data.get("name") || "Learner").trim(),
         email: String(data.get("email") || "").trim(),
         goal: String(data.get("goal") || "Learn Copilot basics"),
+        experience: String(data.get("experience") || "I'm brand new"),
+        access: String(data.get("access") || "I'm not sure yet"),
+        style: String(data.get("style") || "Short hands-on labs"),
+        weeklyGoal: Number(data.get("weeklyGoal") || 60),
         createdAt: new Date().toISOString(),
       });
+      localStorage.setItem(GOAL_KEY, String(data.get("weeklyGoal") || 60));
+      localStorage.removeItem(SIGNED_OUT_KEY);
       setJson(PROGRESS_KEY, { completed: [], minutes: 0 });
       renderAll(true);
     });
@@ -416,6 +476,21 @@
         setJson(PROGRESS_KEY, { completed: [], minutes: 0 });
         localStorage.removeItem(BOOKMARK_KEY);
         renderAll();
+      }
+      if (target.matches("[data-lms-signout]")) {
+        localStorage.setItem(SIGNED_OUT_KEY, "true");
+        renderAll(true);
+      }
+      if (target.matches("[data-lms-signin]")) {
+        localStorage.removeItem(SIGNED_OUT_KEY);
+        renderAll(true);
+      }
+      if (target.matches("[data-lms-new-account]")) {
+        localStorage.removeItem(SIGNED_OUT_KEY);
+        localStorage.removeItem(ACCOUNT_KEY);
+        localStorage.removeItem(PROGRESS_KEY);
+        localStorage.removeItem(BOOKMARK_KEY);
+        renderAll(true);
       }
     });
   };

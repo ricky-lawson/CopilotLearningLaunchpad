@@ -87,12 +87,17 @@
             return nativeFetch(input, init);
           };
         }
+        const nativeConsoleError = console.error.bind(console);
+        console.error = (...args) => {
+          if (String(args[0] || "").includes("[channel] Handshake timed out")) return;
+          nativeConsoleError(...args);
+        };
       })();
     </script>
     <script type="module" crossorigin src="./assets/index-Cs7ZiIml.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-D3dbA_ce.css">
-    <link rel="stylesheet" href="./assets/lms-enhancements.css?v=button-fit-2">
-    <script defer src="./assets/lms-enhancements.js?v=button-fit-2"></script>
+    <link rel="stylesheet" href="./assets/lms-enhancements.css?v=onboarding-signout-2">
+    <script defer src="./assets/lms-enhancements.js?v=onboarding-signout-2"></script>
   </head>
   <body>
     <div id="root"></div>
