@@ -63,6 +63,14 @@
   padding: 8px 10px;
 }
 
+.lms-account-form .lms-button {
+  align-self: end;
+  justify-self: start;
+  min-height: 36px;
+  padding: 7px 12px;
+  width: auto;
+}
+
 .lms-button {
   background: var(--cp-accent);
   border: 1px solid var(--cp-accent);
