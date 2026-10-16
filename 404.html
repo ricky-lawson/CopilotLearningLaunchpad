@@ -77,10 +77,22 @@
     </style>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b11f4b'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='22' font-weight='700' fill='white'%3ECL%3C/text%3E%3C/svg%3E" />
     <title>Copilot Learning Launchpad</title>
+    <script>
+      (() => {
+        const nativeFetch = window.fetch?.bind(window);
+        if (nativeFetch) {
+          window.fetch = (input, init) => {
+            const url = typeof input === "string" ? input : input?.url || "";
+            if (url.includes("/__dev/console")) return Promise.resolve(new Response("", { status: 204 }));
+            return nativeFetch(input, init);
+          };
+        }
+      })();
+    </script>
     <script type="module" crossorigin src="./assets/index-Cs7ZiIml.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-D3dbA_ce.css">
-    <link rel="stylesheet" href="./assets/lms-enhancements.css">
-    <script defer src="./assets/lms-enhancements.js"></script>
+    <link rel="stylesheet" href="./assets/lms-enhancements.css?v=clean-template-7">
+    <script defer src="./assets/lms-enhancements.js?v=clean-template-7"></script>
   </head>
   <body>
     <div id="root"></div>
