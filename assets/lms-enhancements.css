@@ -145,6 +145,111 @@
   margin: 0;
 }
 
+.lms-enterprise-panel {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.14);
+  color: var(--cp-text);
+  font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0 auto 16px;
+  max-width: 80rem;
+  padding: 16px;
+}
+
+.lms-enterprise-header {
+  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.lms-enterprise-eyebrow {
+  color: var(--cp-accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+
+.lms-enterprise-title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.lms-enterprise-subtitle {
+  color: var(--cp-text-muted);
+  font-size: 0.875rem;
+  margin: 4px 0 0;
+  max-width: 64rem;
+}
+
+.lms-enterprise-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.lms-enterprise-card {
+  background: var(--cp-surface-soft);
+  border: 1px solid var(--cp-border);
+  border-radius: 0.625rem;
+  display: grid;
+  gap: 8px;
+  min-height: 148px;
+  padding: 14px;
+}
+
+.lms-enterprise-card h3 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.lms-enterprise-card p {
+  color: var(--cp-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.lms-enterprise-card dl {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 1fr auto;
+  margin: 0;
+}
+
+.lms-enterprise-card dt,
+.lms-enterprise-card dd {
+  color: var(--cp-text-muted);
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.lms-enterprise-card dd {
+  color: var(--cp-text);
+  font-weight: 700;
+  text-align: right;
+}
+
+.lms-enterprise-status {
+  align-self: end;
+  background: var(--cp-accent-soft);
+  border: 1px solid var(--cp-border);
+  border-radius: 999px;
+  color: var(--cp-text);
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 800;
+  justify-self: start;
+  padding: 4px 8px;
+}
+
 [data-lms-hidden="true"] {
   display: none !important;
 }

@@ -426,6 +426,104 @@
   const escapeHtml = (value) =>
     String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
 
+  const renderEnterpriseWorkspace = () => {
+    const main = document.querySelector("main");
+    if (!main) return;
+    let panel = document.querySelector(".lms-enterprise-panel");
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.className = "lms-enterprise-panel";
+      panel.setAttribute("aria-label", "Enterprise LMS workspace");
+      document.querySelector(".lms-account-panel")?.after(panel);
+    }
+
+    const profile = account();
+    const complete = progress().completed.length;
+    const cards = [
+      {
+        title: "Course catalog",
+        body: "Structured Copilot learning paths with prerequisite-aware modules, searchable resources, and a clean course inventory.",
+        stats: [["Published paths", "9"], ["Enrolled learners", profile ? "1" : "0"]],
+        status: "Catalog ready",
+      },
+      {
+        title: "Learning paths",
+        body: "Guided journeys move from foundations to Microsoft 365 Copilot, agents, Cowork, tool selection, leadership, and governance.",
+        stats: [["Assigned path", COURSE_LABELS[Math.min(complete, COURSE_LABELS.length - 1)]], ["Completion", `${pct()}%`]],
+        status: "Personalized after signup",
+      },
+      {
+        title: "Assessments",
+        body: "Knowledge checks, validation steps, and applied practice activities can gate progress without preloading fake results.",
+        stats: [["Quiz state", complete ? "In progress" : "Not started"], ["Attempts", "0"]],
+        status: "Assessment-ready",
+      },
+      {
+        title: "Certification & compliance",
+        body: "Certificate readiness is tracked from real completions only. Compliance-style records stay empty until learners earn them.",
+        stats: [["Certificates", "0"], ["Audit records", complete ? String(complete) : "0"]],
+        status: "Clean audit trail",
+      },
+      {
+        title: "Reporting & analytics",
+        body: "Executive dashboards should report completion, engagement, skills, assessment quality, and cohort health from learner activity.",
+        stats: [["XP", String(xp())], ["Minutes", String(progress().minutes || 0)]],
+        status: "No synthetic metrics",
+      },
+      {
+        title: "Cohorts & live sessions",
+        body: "Blend self-paced lessons with optional office hours, prompt clinics, and facilitator-led cohorts when real events are scheduled.",
+        stats: [["Upcoming sessions", "0"], ["Waitlist", "0"]],
+        status: "Schedule empty",
+      },
+      {
+        title: "Notifications",
+        body: "Reminder, due-date, and nudging patterns are designed but off until a learner explicitly creates an account.",
+        stats: [["Reminders", profile ? "Available" : "Off"], ["Digest", "Not configured"]],
+        status: "Opt-in only",
+      },
+      {
+        title: "Content standards",
+        body: "The template is ready to map lessons to SCORM/xAPI-style IDs, source metadata, versioning, and accessibility checks.",
+        stats: [["SCORM/xAPI", "Planned"], ["Accessibility", "Responsive"]],
+        status: "Governance-ready",
+      },
+      {
+        title: "Access & security",
+        body: "Learner profile and progress are browser-local today, with a clear seam for SSO, roles, admin views, and data retention policies.",
+        stats: [["Account mode", "Local"], ["Roles", "Learner-ready"]],
+        status: "Enterprise pattern",
+      },
+    ];
+
+    panel.innerHTML = `
+      <div class="lms-enterprise-header">
+        <div>
+          <p class="lms-enterprise-eyebrow">Enterprise LMS template</p>
+          <h2 class="lms-enterprise-title">Learning operations workspace</h2>
+          <p class="lms-enterprise-subtitle">Built from LMS feature benchmarks: course management, customization, learning paths, assessments, certification, analytics, notifications, accessibility, security, and blended learning. All operational data starts blank until real learners use it.</p>
+        </div>
+        <span class="lms-pill">No synthetic activity</span>
+      </div>
+      <div class="lms-enterprise-grid">
+        ${cards
+          .map(
+            (card) => `
+          <article class="lms-enterprise-card">
+            <h3>${escapeHtml(card.title)}</h3>
+            <p>${escapeHtml(card.body)}</p>
+            <dl>
+              ${card.stats.map(([label, value]) => `<dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd>`).join("")}
+            </dl>
+            <span class="lms-enterprise-status">${escapeHtml(card.status)}</span>
+          </article>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+  };
+
   const wirePanel = () => {
     document.addEventListener("submit", (event) => {
       const form = event.target.closest("[data-lms-create-account]");
@@ -497,6 +595,7 @@
 
   const renderAll = (force = false) => {
     renderPanel(force);
+    renderEnterpriseWorkspace();
     updateAccountDependentText();
     normalizeCleanSlateProgress();
     hideSyntheticSurfaces();

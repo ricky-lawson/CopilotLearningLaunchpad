@@ -9,6 +9,7 @@ Static GitHub Pages export of a managed app, customized into a clean-slate Copil
 - Community section intentionally blank until real learner activity exists.
 - Synthetic community highlights, leaderboard links, admin links, company/persona framing, and prefilled learner messaging removed or softened.
 - Messaging repositioned around learning Copilot rather than workplace/company adoption.
+- Enterprise LMS workspace covering catalog, paths, assessments, certification/compliance, analytics, notifications, cohorts, content standards, accessibility, and access/security patterns.
 
 ## Publish with GitHub Pages
 
