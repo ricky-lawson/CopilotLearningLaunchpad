@@ -63,12 +63,13 @@
   padding: 8px 10px;
 }
 
-.lms-account-form .lms-button {
+.lms-account-panel form[data-lms-create-account] button.lms-button[type="submit"] {
   align-self: end;
   justify-self: start;
   min-height: 36px;
   padding: 7px 12px;
   width: auto;
+  max-width: max-content;
 }
 
 .lms-button {
