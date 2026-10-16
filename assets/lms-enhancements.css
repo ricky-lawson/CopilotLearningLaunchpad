@@ -1,0 +1,147 @@
+.lms-account-panel {
+  background: var(--cp-panel-strong);
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.14);
+  color: var(--cp-text);
+  display: grid;
+  gap: 12px;
+  font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 16px auto;
+  max-width: 80rem;
+  padding: 16px;
+}
+
+.lms-account-panel * {
+  box-sizing: border-box;
+}
+
+.lms-account-header,
+.lms-account-actions,
+.lms-progress-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.lms-account-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.lms-account-subtitle,
+.lms-small {
+  color: var(--cp-text-muted);
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+.lms-account-form {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.lms-account-form label {
+  color: var(--cp-text-muted);
+  display: grid;
+  font-size: 0.75rem;
+  font-weight: 600;
+  gap: 4px;
+}
+
+.lms-account-form input,
+.lms-account-form select {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: 0.625rem;
+  color: var(--cp-text);
+  min-height: 38px;
+  padding: 8px 10px;
+}
+
+.lms-button {
+  background: var(--cp-accent);
+  border: 1px solid var(--cp-accent);
+  border-radius: 0.625rem;
+  color: var(--cp-accent-fg);
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 38px;
+  padding: 8px 12px;
+}
+
+.lms-button.secondary {
+  background: var(--cp-surface);
+  border-color: var(--cp-border);
+  color: var(--cp-text);
+}
+
+.lms-button:hover {
+  background: var(--cp-accent-hover);
+}
+
+.lms-button.secondary:hover {
+  background: var(--cp-surface-soft);
+}
+
+.lms-meter {
+  background: var(--cp-surface-soft);
+  border: 1px solid var(--cp-border);
+  border-radius: 999px;
+  height: 10px;
+  min-width: 180px;
+  overflow: hidden;
+}
+
+.lms-meter span {
+  background: var(--cp-accent);
+  display: block;
+  height: 100%;
+  width: 0;
+}
+
+.lms-pill {
+  background: var(--cp-accent-soft);
+  border: 1px solid var(--cp-border);
+  border-radius: 999px;
+  color: var(--cp-text);
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+}
+
+.lms-community-empty {
+  background: var(--cp-surface);
+  border: 1px dashed var(--cp-border-strong);
+  border-radius: 16px;
+  color: var(--cp-text);
+  font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 16px 0;
+  padding: 24px;
+}
+
+.lms-community-empty h1,
+.lms-community-empty h2 {
+  font-size: 1.5rem;
+  margin: 0 0 8px;
+}
+
+.lms-community-empty p {
+  color: var(--cp-text-muted);
+  margin: 0;
+}
+
+[data-lms-hidden="true"] {
+  display: none !important;
+}
+
+[data-slot="dialog-overlay"],
+[data-slot="dialog-content"][aria-hidden="true"] {
+  display: none !important;
+  pointer-events: none !important;
+}
